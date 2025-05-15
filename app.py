@@ -15,5 +15,26 @@ def create_task():
     tasks.append(newTask)
     return jsonify({"message": "Nova tarefa criada com sucesso."})
 
+
+@app.route('/tasks', methods=['GET'])
+def get_tasks():
+    list_tasks = [task.to_dict() for task in tasks]
+
+    output = {
+        "tasks": list_tasks,
+        "total_tasks": len(list_tasks)
+    }
+    return jsonify(output)
+
+
+@app.route('/tasks/<int:id>', methods=['GET'])
+def get_task(id):
+    for task in tasks:
+        if task.id == id:
+            return jsonify(task.to_dict())
+    return jsonify({"message": "Não foi possível encontrar atividade."}), 404
+
+
+
 if __name__ == "__main__":
     app.run(debug=True)
